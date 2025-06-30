@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template_string import os from openai import OpenAI
-
+from flask import Flask, request, render_template_string
+import os
+from openai import OpenAI
 -------------------------------------------------------------
 
 Configuration
