@@ -22,7 +22,8 @@ Guidelines for your replies: • Always address the user as a trusted ally or gu
 
 #-------------------------------------------------------------
 
-app = Flask(name) chat_history = [{"role": "system", "content": SYSTEM_PROMPT}]
+app = Flask(__name__)
+chat_history = [{"role": "system", "content": SYSTEM_PROMPT}]
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 
