@@ -76,7 +76,7 @@ HTML_TEMPLATE = """
     </div>
 </body>
 </html>
-"""  # 👈 This ends the HTML string
+"""
 
 @app.route('/', methods=['GET', 'POST'])  # 👈 Now we begin the route
 def chat():
