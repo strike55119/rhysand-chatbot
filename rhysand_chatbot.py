@@ -88,3 +88,7 @@ def chat():
             assistant_reply = response.choices[0].message.content.strip()
             chat_history.append({"role": "assistant", "content": assistant_reply})
     return render_template_string(HTML_TEMPLATE, messages)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))  # Render sets this
+    app.run(host='0.0.0.0', port=port)        # Must be 0.0.0.0 and PORT
