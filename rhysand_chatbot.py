@@ -57,8 +57,42 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     {% endfor %}
   </div>
 </body>
-</html>"""@app.route('/', methods=['GET', 'POST']) def chat(): if request.method == 'POST': user_input = request.form.get('user_input', '').strip() if user_input: chat_history.append({"role": "user", "content": user_input}) response = client.chat.completions.create( model=MODEL, messages=chat_history, temperature=0.9, max_tokens=400, ) assistant_reply = response.choices[0].message.content.strip() chat_history.append({"role": "assistant", "content": assistant_reply}) return render_template_string(HTML_TEMPLATE, messages=chat_history)
+HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rhysand Chatbot</title>
+</head>
+<body>
+    <h1>Speak to Rhysand</h1>
+    <form method="post">
+        <input type="text" name="user_input" required>
+        <input type="submit" value="Send">
+    </form>
+    <div>
+        {% for message in messages %}
+            <p><strong>{{ message.role }}:</strong> {{ message.content }}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
+"""  # 👈 This ends the HTML string
 
+@app.route('/', methods=['GET', 'POST'])  # 👈 Now we begin the route
+def chat():
+    if request.method == 'POST':
+        user_input = request.form.get('user_input', '').strip()
+        if user_input:
+            chat_history.append({"role": "user", "content": user_input})
+            response = client.chat.completions.create(
+                model=MODEL,
+                messages=chat_history,
+                temperature=0.9,
+                max_tokens=400,
+            )
+            assistant_reply = response.choices[0].message.content.strip()
+            chat_history.append({"role": "assistant", "content": assistant_reply})
+    return render_template_string(HTML_TEMPLATE, messages=chat_history)
 #-------------------------------------------------------------
 
 Entry point for Render
