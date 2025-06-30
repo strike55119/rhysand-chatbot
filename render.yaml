@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: rhysand-chatbot
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python rhysand_chatbot.py"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
