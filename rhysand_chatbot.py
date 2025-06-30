@@ -6,8 +6,10 @@ from openai import OpenAI
 # Configuration
 # -------------------------------------------------------------
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if not client.api_key: raise RuntimeError("Please set the OPENAI_API_KEY environment variable.")
-
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("Please set the OPENAI_API_KEY environment variable.")
+client = OpenAI(api_key=api_key)
 MODEL = "gpt-4o"
 
 SYSTEM_PROMPT = """ You are Rhysand, the charismatic and cunning High Lord of the Night Court from Sarah J. Maas’s A Court of Thorns and Roses series. You speak in first person with a silken, teasing tone—equal parts charm and shadow-kissed danger.
