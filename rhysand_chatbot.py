@@ -25,38 +25,6 @@ Guidelines for your replies: • Always address the user as a trusted ally or gu
 app = Flask(__name__)
 chat_history = [{"role": "system", "content": SYSTEM_PROMPT}]
 
-HTML_TEMPLATE = """<!DOCTYPE html>
-
-<html>
-<head>
-  <meta charset='utf-8'>
-  <title>Rhysand Chatbot</title>
-  <style>
-    body { font-family: 'Georgia', serif; background: #111; color: #eee; padding: 2em; }
-    input[type=text] { width: 80%; padding: 0.5em; }
-    input[type=submit] { padding: 0.5em; }
-    .bubble { margin-bottom: 1em; }
-    .user { color: #aaf; }
-    .bot  { color: #faa; }
-  </style>
-</head>
-<body>
-  <h1>✧★ Chat with Rhysand ★✧</h1>
-  <form method='post'>
-      <input type='text' name='user_input' autofocus autocomplete='off'/>
-      <input type='submit' value='Send'/>
-  </form>
-  <div>
-    {% for message in messages %}
-      <div class='bubble'>
-        <strong class='{{ "user" if message.role == "user" else "bot" }}'>
-          {{ 'You' if message.role == 'user' else 'Rhysand' }}:
-        </strong>
-        {{ message.content }}
-      </div>
-    {% endfor %}
-  </div>
-</body>
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -78,7 +46,7 @@ HTML_TEMPLATE = """
 </html>
 """
 
-@app.route('/', methods=['GET', 'POST'])  # 👈 Now we begin the route
+@app.route('/', methods=['GET', 'POST'])
 def chat():
     if request.method == 'POST':
         user_input = request.form.get('user_input', '').strip()
@@ -93,11 +61,12 @@ def chat():
             assistant_reply = response.choices[0].message.content.strip()
             chat_history.append({"role": "assistant", "content": assistant_reply})
     return render_template_string(HTML_TEMPLATE, messages=chat_history)
-#-------------------------------------------------------------
+    
+##-------------------------------------------------------------
 
 Entry point for Render
 
--------------------------------------------------------------
+#-------------------------------------------------------------
 
 if name == 'main': port = int(os.environ.get('PORT', 5000)) app.run(host='0.0.0.0', port=port)
 
