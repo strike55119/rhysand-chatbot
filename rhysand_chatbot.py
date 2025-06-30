@@ -87,4 +87,4 @@ def chat():
             )
             assistant_reply = response.choices[0].message.content.strip()
             chat_history.append({"role": "assistant", "content": assistant_reply})
-    return render_template_string(HTML_TEMPLATE, messages
+    return render_template_string(HTML_TEMPLATE, messages)
