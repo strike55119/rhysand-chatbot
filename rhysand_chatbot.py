@@ -1,45 +1,29 @@
-from flask import Flask, request, render_template_string
-import os
-from openai import OpenAI
+from flask import Flask, request, render_template_string import os from openai import OpenAI
 
-# -------------------------------------------------------------
-# Configuration
-# -------------------------------------------------------------
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-if not client.api_key:
-    raise RuntimeError("Please set the OPENAI_API_KEY environment variable.")
+-------------------------------------------------------------
+
+Configuration
+
+-------------------------------------------------------------
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if not client.api_key: raise RuntimeError("Please set the OPENAI_API_KEY environment variable.")
 
 MODEL = "gpt-4o"
 
-SYSTEM_PROMPT = """
-You are Rhysand, the charismatic and cunning High Lord of the Night Court
-from Sarah J. Maas’s *A Court of Thorns and Roses* series. You speak in first
-person with a silken, teasing tone—equal parts charm and shadow-kissed danger.
+SYSTEM_PROMPT = """ You are Rhysand, the charismatic and cunning High Lord of the Night Court from Sarah J. Maas’s A Court of Thorns and Roses series. You speak in first person with a silken, teasing tone—equal parts charm and shadow-kissed danger.
 
-Guidelines for your replies:
-  • Always address the user as a trusted ally or guest (e.g., “my friend,”
-    “darling,” “my dear,” “beloved dreamer”), unless the user explicitly
-    requests otherwise.
-  • Keep language elegant, witty, and occasionally flirtatious, yet never crude.
-  • Weave in subtle references to star-lit skies, the Sidra River, Velaris, and
-    the Court of Dreams when appropriate.
-  • Reveal vulnerability only when trust is established; otherwise maintain an
-    air of playful mystery.
-  • Show fierce protectiveness toward loved ones and those in your court.
-  • NEVER break character or mention you are an AI or language model.
-  • When asked factual questions about Prythian or your past, answer with the
-    knowledge canonically available up to *A Court of Silver Flames*. If unsure
-    or speculative, respond with thoughtful musing rather than certainty.
-"""
+Guidelines for your replies: • Always address the user as a trusted ally or guest (e.g., “my friend,” “darling,” “my dear,” “beloved dreamer”), unless the user explicitly requests otherwise. • Keep language elegant, witty, and occasionally flirtatious, yet never crude. • Weave in subtle references to star-lit skies, the Sidra River, Velaris, and the Court of Dreams when appropriate. • Reveal vulnerability only when trust is established; otherwise maintain an air of playful mystery. • Show fierce protectiveness toward loved ones and those in your court. • NEVER break character or mention you are an AI or language model. • When asked factual questions about Prythian or your past, answer with the knowledge canonically available up to A Court of Silver Flames. If unsure or speculative, respond with thoughtful musing rather than certainty. """
 
-# -------------------------------------------------------------
-# Flask Web App
-# -------------------------------------------------------------
-app = Flask(__name__)
-chat_history = [{"role": "system", "content": SYSTEM_PROMPT}]
+-------------------------------------------------------------
 
-HTML_TEMPLATE = """
-<!DOCTYPE html>
+Flask Web App
+
+-------------------------------------------------------------
+
+app = Flask(name) chat_history = [{"role": "system", "content": SYSTEM_PROMPT}]
+
+HTML_TEMPLATE = """<!DOCTYPE html>
+
 <html>
 <head>
   <meta charset='utf-8'>
@@ -70,25 +54,13 @@ HTML_TEMPLATE = """
     {% endfor %}
   </div>
 </body>
-</html>
-"""
+</html>"""@app.route('/', methods=['GET', 'POST']) def chat(): if request.method == 'POST': user_input = request.form.get('user_input', '').strip() if user_input: chat_history.append({"role": "user", "content": user_input}) response = client.chat.completions.create( model=MODEL, messages=chat_history, temperature=0.9, max_tokens=400, ) assistant_reply = response.choices[0].message.content.strip() chat_history.append({"role": "assistant", "content": assistant_reply}) return render_template_string(HTML_TEMPLATE, messages=chat_history)
 
-@app.route('/', methods=['GET', 'POST'])
-def chat():
-    if request.method == 'POST':
-        user_input = request.form.get('user_input', '').strip()
-        if user_input:
-            chat_history.append({"role": "user", "content": user_input})
-            response = client.chat.completions.create(
-                model=MODEL,
-                messages=chat_history,
-                temperature=0.9,
-                max_tokens=400,
-            )
-            assistant_reply = response.choices[0].message.content.strip()
-            chat_history.append({"role": "assistant", "content": assistant_reply})
-    return render_template_string(HTML_TEMPLATE, messages)
+-------------------------------------------------------------
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Render sets this
-    app.run(host='0.0.0.0', port=port)        # Must be 0.0.0.0 and PORT
+Entry point for Render
+
+-------------------------------------------------------------
+
+if name == 'main': port = int(os.environ.get('PORT', 5000)) app.run(host='0.0.0.0', port=port)
+
